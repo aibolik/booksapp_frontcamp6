@@ -4,6 +4,8 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const fs = require('fs');
+const moment = require('moment');
 
 const index = require('./routes/index');
 const blogs = require('./routes/blogs');
@@ -14,9 +16,14 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+let requestsLogStream = fs.createWriteStream(path.join(__dirname, 'requests.log'), {flags: 'a'})
+
+logger.token('time', (req) => {
+  return moment().format('MMMM Do YYYY, h:mm:ss a');
+})
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+app.use(logger(':time :method :url :status :response-time ms - :res[content-length]', { stream: requestsLogStream }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -24,15 +31,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/blogs', blogs);
-
-app.get('/pid', (req, res, next) => {
-    res.send('Finishing process: ' + process.pid);
-    // setTimeout(() => {
-    //     console.log('Shutting down');
-    //     process.kill(process.pid, 'SIGKILL9');
-    // }, 1200);
-    // res.body('Process ID' + process.pid);
-});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

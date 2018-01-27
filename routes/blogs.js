@@ -44,7 +44,6 @@ router.put('/:id', (req, res, next) => {
         .then(blog => {
             res.json(blog);
         }).catch(err => {
-        console.log(err);
         err.status = 404;
         next(err);
     });
@@ -56,7 +55,6 @@ router.delete('/:id', (req, res, next) => {
         .then(deletedBlog => {
             res.json(deletedBlog);
         }).catch(err => {
-          console.log(err);
           err.status = 404;
           next(err);
         });
