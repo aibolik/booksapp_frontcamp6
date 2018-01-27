@@ -1,0 +1,1 @@
+nohup nodemon > app.log 2>&1 &

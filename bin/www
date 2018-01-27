@@ -6,7 +6,8 @@
 
 var app = require('../app');
 var debug = require('debug')('booksapp:server');
-var http = require('http');
+var https = require('https');
+var fs = require('fs');
 
 /**
  * Get port from environment and store in Express.
@@ -15,11 +16,18 @@ var http = require('http');
 var port = normalizePort(process.env.PORT || '1000');
 app.set('port', port);
 
+// for HTTPS
+var options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/sdubot.jsindev.party/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/sdubot.jsindev.party/cert.pem'),
+    ca: fs.readFileSync('/etc/letsencrypt/live/sdubot.jsindev.party/chain.pem')
+};
+
 /**
- * Create HTTP server.
+ * Create HTTPS server.
  */
 
-var server = http.createServer(app);
+var server = https.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
