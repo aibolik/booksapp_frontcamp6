@@ -40,7 +40,7 @@ router.post('/', (req, res) => {
 
 /* PUT update a blog instance */
 router.put('/:id', (req, res, next) => {
-    BlogModel.findByIdAndUpdate(req.params.id, req.body, { upsert: true })
+    BlogModel.findByIdAndUpdate(req.params.id, req.body, { new: true, upsert: true })
         .then(blog => {
             res.json(blog);
         }).catch(err => {
@@ -53,7 +53,9 @@ router.put('/:id', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
     BlogModel.findByIdAndRemove(req.params.id)
         .then(deletedBlog => {
-            res.json(deletedBlog);
+            res.json({
+                id: deletedBlog.id
+            });
         }).catch(err => {
           err.status = 404;
           next(err);
