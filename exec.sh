@@ -1,1 +1,1 @@
-nohup nodemon > app.log 2>&1 &
+nohup node ./bin/www > app.log 2>&1 &

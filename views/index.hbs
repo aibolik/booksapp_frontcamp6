@@ -1,2 +1,9 @@
 <h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<p>Welcome to {{title}}
+    {{#if user}}
+        <strong>{{ user.name }}</strong>
+    {{/if}}
+</p>
+{{#if user}}
+    <button>Log out</button>
+{{/if}}

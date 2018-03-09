@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const BlogSchema = new Schema({
     title: String,
-    author: String,
+    author: { type: Schema.Types.ObjectId, ref: 'User' },
+    text: String,
     views: Number,
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
